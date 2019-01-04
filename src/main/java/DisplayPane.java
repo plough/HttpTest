@@ -14,6 +14,8 @@ class DisplayPane extends JPanel {
     private JTextArea resContentText;
     private boolean normalState = true;
     private JLabel counterLabel;
+    private JLabel maxWaitingSecondsLabel;
+    private int maxWaitingSeconds = 0;
     private int counter = 0; // 连续请求次数
 
     DisplayPane() {
@@ -29,10 +31,15 @@ class DisplayPane extends JPanel {
     private JPanel createShowHeaderPane() {
         JPanel headerPane = new JPanel();
 
+        maxWaitingSecondsLabel = new JLabel("最长等待时间：" + maxWaitingSeconds + "s");
+        headerPane.add(maxWaitingSecondsLabel);
+
         counterLabel = new JLabel("已连续发送" + counter + "次请求");
         counterLabel.setBorder(new EmptyBorder(0, 0, 0, 20));
         headerPane.add(counterLabel);
         counterLabel.setVisible(false);
+
+
 
         final JLabel resHeaderLabel = new JLabel("服务器响应头：");
         headerPane.add(resHeaderLabel);
@@ -68,12 +75,20 @@ class DisplayPane extends JPanel {
         if (!counterLabel.isVisible()) {
             counterLabel.setVisible(true);
         }
+
+        maxWaitingSecondsLabel.setText("最长等待时间：" + maxWaitingSeconds + "s");
     }
 
     void initCounter() {
         counter = 0;
         if (counterLabel.isVisible()) {
             counterLabel.setVisible(false);
+        }
+    }
+
+    void updateMaxWaitingSeconds(int waitingSeconds) {
+        if (waitingSeconds > maxWaitingSeconds) {
+            this.maxWaitingSeconds = waitingSeconds;
         }
     }
 

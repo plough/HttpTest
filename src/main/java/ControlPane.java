@@ -28,7 +28,6 @@ class ControlPane extends JPanel {
     private Thread loopThread;
 
 
-
     ControlPane(DisplayPane displayPane) {
         assert displayPane != null;
 
@@ -137,7 +136,12 @@ class ControlPane extends JPanel {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(httpUrl);
         try {
+            long startTime = System.currentTimeMillis();
             CloseableHttpResponse response = httpClient.execute(httpGet);
+            long endTime = System.currentTimeMillis();
+            int waitingSeconds = (int)((endTime - startTime) / 1000);
+            displayPane.updateMaxWaitingSeconds(waitingSeconds);
+
             HttpEntity entity = response.getEntity();
             String responseContent = EntityUtils.toString(entity, "UTF-8");
             log(response.getStatusLine().toString(), responseContent);
